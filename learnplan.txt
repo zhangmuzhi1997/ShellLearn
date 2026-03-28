@@ -1,0 +1,516 @@
+第一周：基础热身
+Day 1：认识 Shell 与第一个脚本
+学习要点
+
+什么是 Shell、终端、命令行
+
+常见 Shell：bash、zsh
+
+创建脚本文件：touch myscript.sh
+
+Shebang：#!/bin/bash
+
+赋予执行权限：chmod +x myscript.sh
+
+运行脚本：./myscript.sh 或 bash myscript.sh
+
+实操任务
+
+打开终端，创建一个名为 hello.sh 的文件。
+在文件第一行写入 #!/bin/bash，第二行写入 echo "Hello, World!"。
+保存文件，并给它添加执行权限。
+运行脚本，观察输出。
+修改脚本，让它打印当前日期（提示：date 命令）。
+Day 2：变量与命令替换
+学习要点
+
+定义变量：name="value"（等号两边无空格）
+
+使用变量：$name 或 ${name}
+
+环境变量：$HOME、$PATH
+
+命令替换：$(command) 或 `command`
+
+实操任务
+
+编写脚本 info.sh，定义变量 username 为你的系统用户名（或通过 whoami 获取）。
+打印 "当前用户是：$username"。
+用命令替换获取当前工作目录，存入变量 current_dir，并打印。
+再获取当前 Shell 的类型（echo $SHELL），一并输出。
+尝试将脚本中的 $username 改为 ${username}，验证结果相同。
+Day 3：位置参数与特殊变量
+学习要点
+
+$0：脚本名称
+
+$1、$2……：第1、第2个参数
+
+$#：参数个数
+
+$@：所有参数（列表）
+
+$?：上一条命令的退出状态（0 表示成功）
+
+实操任务
+
+编写脚本 greet.sh，接收一个名字作为参数（$1）。
+如果参数个数不为 1，则提示“用法：./greet.sh 你的名字”，并退出。
+否则打印 "你好，$1！"。
+测试：分别运行 ./greet.sh（无参数）和 ./greet.sh Alice。
+在脚本中加上一行 echo "脚本名称是：$0"，观察输出。
+Day 4：用户交互（read）
+学习要点
+
+read 命令：从标准输入读取数据
+
+常用选项：-p（提示信息）、-t（超时）、-s（静默输入）
+
+实操任务
+
+编写脚本 ask.sh，使用 read -p 询问用户“你最喜欢的编程语言是什么？”。
+将答案存入变量 lang，然后打印 "原来你喜欢 $lang 啊！"。
+增加一个功能：用 read -s -p "请输入一个秘密字符：" secret 读取一个字符（不回显），然后打印“已收到”（不要打印秘密字符）。
+用 read -t 5 添加超时：如果5秒内没有输入名字，就自动退出。
+Day 5：条件判断基础
+学习要点
+
+if 语句结构：if [ condition ]; then ... fi
+
+数字比较：-eq、-ne、-lt、-le、-gt、-ge
+
+注意 [ ] 内部必须有空格
+
+实操任务
+
+编写脚本 compare.sh，接收两个数字作为参数。
+如果参数个数不足2，报错退出。
+比较两个数字的大小，输出类似“5 大于 3”的信息。
+用 if-elif-else 处理所有可能的情况（大于、小于、等于）。
+测试不同参数组合。
+Day 6：字符串与文件测试
+学习要点
+
+字符串比较：=（等于）、!=（不等于）、-z（空字符串）、-n（非空）
+
+文件测试：-e（存在）、-f（普通文件）、-d（目录）、-r（可读）等
+
+实操任务
+
+编写脚本 check_file.sh，接收一个文件路径作为参数。
+先判断参数是否提供，若没有则提示并退出。
+判断该路径是否存在，若不存在则输出“文件或目录不存在”。
+如果存在，进一步判断是普通文件还是目录，并输出相应信息。
+如果是普通文件，再判断是否可读、可写、可执行。
+Day 7：综合练习 – 备份脚本雏形
+学习要点
+
+综合应用变量、条件、参数
+
+使用 mkdir -p 创建目录（递归创建）
+
+使用 cp 或 rsync 复制文件
+
+实操任务
+
+编写脚本 backup.sh，接受源文件/目录和目标目录作为两个参数。
+检查参数个数，不足则显示用法。
+检查源是否存在，不存在则报错退出。
+检查目标目录是否存在，若不存在则用 mkdir -p 创建。
+用 cp -r 将源复制到目标目录下，复制时在文件名后添加当前日期（格式 YYYYMMDD），例如 file_20260327.txt。
+复制完成后，输出“备份完成”。
+第二周：核心编程结构
+Day 8：for 循环基础
+学习要点
+
+for 循环语法：for var in list; do ... done
+
+生成列表的方法：{1..5}、$(seq 1 5)、直接写多个值
+
+通配符展开：*.txt 获取当前目录所有 txt 文件
+
+实操任务
+
+编写脚本 loop_numbers.sh，用 for 循环打印 1 到 10 的数字。
+再写一个脚本 list_files.sh，循环遍历当前目录下所有 .sh 文件，并打印文件名。
+用 for 循环批量创建文件：file1.txt、file2.txt……file5.txt（提示：使用 touch）。
+Day 9：while 循环与无限循环
+学习要点
+
+while 循环：while [ condition ]; do ... done
+
+until 循环：条件为假时执行
+
+无限循环：while true; do ... done，配合 break 退出
+
+实操任务
+
+编写脚本 countdown.sh，接收一个数字参数，从该数字倒计时到 0，每秒输出一次（提示：sleep 1）。
+编写一个菜单脚本 menu.sh，用 while true 实现无限循环，显示选项：
+1）显示日期
+2）列出当前目录
+3）退出
+使用 read 读取用户输入，用 case 处理选择，选择退出时 break。
+Day 10：循环控制与读取文件
+学习要点
+
+break 跳出循环，continue 跳过本次循环
+
+使用 while read line 逐行读取文件内容
+
+重定向输入：while ... done < file
+
+实操任务
+
+创建一个 names.txt 文件，里面写上几行名字（如 Alice、Bob、Charlie）。
+编写脚本 read_names.sh，用 while read line 逐行读取 names.txt，每行输出 "Hello, $line"。
+再写一个脚本 sum_numbers.sh，读取一个包含数字（每行一个）的文件，计算总和并输出。
+尝试用 break 在读到某个特定名字时提前退出循环。
+Day 11：函数定义与调用
+学习要点
+
+定义函数：function myfunc() { ... } 或 myfunc() { ... }
+
+函数参数：$1、$2 是函数内的参数，与脚本参数不同
+
+局部变量：local var=value
+
+函数返回值：用 return 返回数字（0-255），或用 echo 返回字符串
+
+实操任务
+
+编写脚本 func_demo.sh，定义一个 greet 函数，接收一个名字参数，输出 "Hello, 名字"。
+在脚本中调用该函数两次，传入不同名字。
+定义一个 is_even 函数，接收一个数字，如果是偶数返回 0，否则返回 1。在脚本中调用并判断输出“偶数”或“奇数”。
+使用 local 在函数内定义一个变量，观察函数外能否访问到。
+Day 12：模块化与脚本拆分
+学习要点
+
+将一个脚本拆分为多个函数
+
+使用 source 或 . 引入外部脚本（共享函数库）
+
+编写库文件，供其他脚本调用
+
+实操任务
+
+创建一个 lib.sh 文件，里面定义两个函数：log_info（打印绿色信息）和 log_error（打印红色信息）。
+创建另一个脚本 use_lib.sh，用 source ./lib.sh 引入库函数。
+在 use_lib.sh 中，分别调用 log_info 和 log_error 输出测试信息。
+修改 lib.sh，添加一个 backup_file 函数，接收源文件和目标目录，实现备份逻辑。然后在 use_lib.sh 中调用它。
+Day 13：参数处理进阶
+学习要点
+
+使用 shift 移动位置参数
+
+getopts 解析短选项（如 -a、-b value）
+
+设置默认值：${var:-default}
+
+实操任务
+
+编写脚本 args_demo.sh，使用 while getopts "u:p:" opt 解析选项 -u 用户名、-p 端口号。
+如果选项缺少参数，提示错误。
+解析完成后，打印用户名和端口号。
+添加一个 -h 选项显示帮助信息。
+用 ${1:-默认值} 实现一个功能：如果没有传递参数，使用默认值。
+Day 14：综合练习 – 增强版备份脚本
+学习要点
+
+综合应用函数、参数解析、循环
+
+使用 tar 打包压缩
+
+记录日志
+
+实操任务
+
+编写脚本 backup_enhanced.sh，支持以下选项：
+-s 源目录
+-d 目标目录
+-c 是否压缩（可选，默认为否）
+-h 帮助
+若压缩，则用 tar -czf 生成 .tar.gz 文件；否则用 cp -r。
+备份文件名包含日期和时间（如 backup_20260327_1530.tar.gz）。
+将操作记录到日志文件（例如 /var/log/backup.log，注意权限，也可以放在用户目录）。
+使用函数分别实现备份、日志记录功能。
+第三周：进阶技巧与调试
+Day 15：文本搜索 grep
+学习要点
+
+grep 基本用法：grep pattern file
+
+常用选项：-i（忽略大小写）、-r（递归）、-n（显示行号）、-v（反向匹配）
+
+正则表达式基础：.、*、^、$、[abc]
+
+实操任务
+
+创建一个 test.txt 文件，写入几行内容，包括邮箱地址、IP 地址等。
+用 grep 查找包含“error”的行（忽略大小写）。
+查找以数字开头的行。
+查找邮箱地址（简单模式：[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}）。
+统计当前目录下所有 .log 文件中包含“ERROR”的行数。
+Day 16：流编辑器 sed
+学习要点
+
+sed 工作原理：逐行处理
+
+替换：sed 's/old/new/g'
+
+删除行：sed '/pattern/d'
+
+打印行：sed -n '2p'
+
+直接修改文件：-i 选项（谨慎使用）
+
+实操任务
+
+创建一个 data.txt，内容包含多行文字，其中有一些单词“foo”。
+用 sed 将“foo”替换为“bar”，输出到屏幕（不修改原文件）。
+删除包含“delete”的行。
+在每行开头添加行号（提示：sed = 结合 N，或直接 sed '=' file | sed 'N;s/\n/ /'）。
+用 sed -i.bak 替换文件内容，并保留备份。
+Day 17：文本处理利器 awk
+学习要点
+
+awk 基础：awk '{print $1}' 打印第一列
+
+内置变量：NF（字段数）、NR（行号）
+
+模式匹配：awk '/pattern/ {action}'
+
+自定义分隔符：-F,
+
+使用 BEGIN 和 END 块
+
+实操任务
+
+创建一个 students.csv，内容为：
+text
+姓名,语文,数学,英语
+张三,85,92,78
+李四,88,76,90
+用 awk 打印所有学生的姓名和数学成绩。
+计算数学的平均分（使用 END 块）。
+找出语文成绩大于 80 的学生。
+打印行号、姓名、总分（提示：$2+$3+$4）。
+Day 18：重定向与管道
+学习要点
+
+输出重定向：>（覆盖）、>>（追加）
+
+错误重定向：2>、2>&1
+
+管道 | 连接多个命令
+
+xargs：将标准输入转为命令行参数
+
+实操任务
+
+编写脚本 redirect_demo.sh，将 ls -l 的输出保存到 filelist.txt，错误信息保存到 error.log。
+用 find . -name "*.txt" -print0 | xargs -0 rm 删除所有 txt 文件（小心测试，可以先 echo 代替 rm）。
+统计 /var/log/syslog（或系统其他日志）中“Failed”出现的次数，将结果写入 count.txt。
+组合 ps aux 和 grep，找出所有 bash 进程，再用 awk 提取 PID。
+Day 19：进程与信号
+学习要点
+
+后台运行：&
+
+作业控制：jobs、fg、bg
+
+信号处理：trap 捕获信号（如 INT、TERM）
+
+杀死进程：kill、killall
+
+实操任务
+
+编写脚本 long_task.sh，模拟一个长时间运行的任务（如循环 100 次，每次 sleep 1 秒并打印进度）。
+在脚本中使用 trap "echo '脚本被中断'; exit" INT 捕获 Ctrl+C，打印消息后退出。
+在终端中以后台方式运行该脚本（./long_task.sh &），然后用 jobs 查看，再用 fg 调回前台。
+用 kill 命令发送 TERM 信号，观察脚本行为（需要脚本中 trap 了 TERM）。
+Day 20：调试技巧
+学习要点
+
+使用 set -x 打印每条执行的命令
+
+使用 set -e 遇错即停
+
+使用 set -u 禁止未定义变量
+
+使用 set -o pipefail 让管道中任何命令失败都返回失败
+
+常用组合：set -euxo pipefail
+
+实操任务
+
+创建一个有错误的脚本 buggy.sh（如未定义变量、命令执行失败）。
+在脚本开头加上 set -x，运行并观察输出，找出错误。
+加上 set -e，观察脚本在出错时是否提前退出。
+将 set -euxo pipefail 放到脚本开头，尝试写一个管道命令，让中间命令失败，验证整体退出状态。
+用 trap 'echo "错误发生在行 $LINENO"' ERR 捕获错误并打印行号。
+Day 21：综合练习 – 系统健康检查脚本
+学习要点
+
+综合应用前三周所学
+
+获取系统信息：磁盘、内存、CPU 负载
+
+发送通知（邮件、写入日志）
+
+实操任务
+
+编写脚本 health_check.sh，实现以下检查：
+磁盘使用率：df -h，若某个分区使用率超过 80%，报警。
+内存使用率：free，若剩余内存小于 200MB，报警。
+负载：uptime，若 5 分钟负载超过 CPU 核心数，报警。
+报警方式：将警告信息写入 /var/log/health.log（可以用普通文件替代）。
+如果任何一项报警，发送邮件（可以用 mail 命令，或者简单地输出红色警告）。
+将检查逻辑写成函数，主流程清晰。
+使用 set -euo pipefail 提高脚本健壮性。
+第四周：实战与自动化
+Day 22：定时任务 crontab
+学习要点
+
+crontab -e 编辑用户定时任务
+
+时间格式：分 时 日 月 周
+
+常用示例：0 2 * * * /path/to/script.sh（每天凌晨2点）
+
+查看日志：grep CRON /var/log/syslog
+
+实操任务
+
+编写一个简单脚本 cron_test.sh，内容为 echo "Task ran at $(date)" >> /tmp/cron.log。
+使用 crontab -e 添加一条任务，每分钟运行一次该脚本。
+等待几分钟，查看 /tmp/cron.log 确认脚本执行。
+修改任务为每天凌晨 3 点执行健康检查脚本（Day21 的脚本）。
+学习 crontab -l 列出任务，crontab -r 删除任务（谨慎）。
+Day 23：开机启动与 systemd
+学习要点
+
+在 /etc/rc.local 中添加启动命令（传统方式）
+
+使用 systemd 创建自定义服务单元
+
+服务文件位置：/etc/systemd/system/myservice.service
+
+常用命令：systemctl enable、systemctl start、systemctl status
+
+实操任务
+
+创建一个脚本 /usr/local/bin/startup_demo.sh，内容为 echo "Started at $(date)" >> /tmp/startup.log。
+使用传统方法：在 /etc/rc.local 的 exit 0 前添加一行 /usr/local/bin/startup_demo.sh（需要 root 权限）。重启，检查 /tmp/startup.log。
+使用 systemd 方法：创建 /etc/systemd/system/startup-demo.service，内容：
+text
+[Unit]
+Description=Startup Demo
+
+[Service]
+ExecStart=/usr/local/bin/startup_demo.sh
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+执行 sudo systemctl enable startup-demo 和 sudo systemctl start startup-demo，检查状态和日志。
+Day 24：日志轮转与维护
+学习要点
+
+logrotate 配置：轮转、压缩、保留数量
+
+为自己的脚本日志配置 logrotate
+
+清理旧文件：find 结合 -mtime 删除过期文件
+
+实操任务
+
+确保健康检查脚本将日志写入 /var/log/health.log。
+创建 /etc/logrotate.d/health 配置文件：
+text
+/var/log/health.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+}
+手动运行 sudo logrotate -f /etc/logrotate.d/health 测试轮转。
+编写脚本 cleanup.sh，用 find /tmp -type f -mtime +7 -delete 删除 7 天前的临时文件，并加入到 cron 中每周执行一次。
+Day 25：网络请求与 API 调用
+学习要点
+
+使用 curl 或 wget 发送 HTTP 请求
+
+处理 JSON 响应：可用 jq 工具解析
+
+发送告警到第三方服务（如钉钉、Slack webhook）
+
+实操任务
+
+安装 jq（sudo apt install jq 或 brew install jq）。
+编写脚本 weather.sh，调用免费天气 API（如 wttr.in 或 https://api.openweathermap.org），获取并解析天气信息。
+如果不需要真实 API，可以模拟：curl -s https://api.github.com/repos/... 解析 JSON。
+结合健康检查脚本，当磁盘告警时，发送一个 HTTP POST 请求到测试的 webhook.site 或本地模拟服务。
+学习 curl 常用选项：-X、-H、-d。
+Day 26：脚本安全与优化
+学习要点
+
+避免使用 eval
+
+小心处理临时文件：使用 mktemp
+
+权限最小化：不要用 root 运行非必要脚本
+
+使用 shellcheck 静态分析
+
+实操任务
+
+安装 shellcheck（sudo apt install shellcheck 或通过包管理器）。
+对自己之前写的某个脚本运行 shellcheck，修正所有警告。
+修改一个脚本，将临时文件改为 tempfile=$(mktemp)，并在脚本结束时 trap "rm -f $tempfile" EXIT 自动删除。
+检查脚本中是否有硬编码的敏感信息（如密码），改用环境变量或交互式输入。
+Day 27：实战项目 – 自动部署脚本
+学习要点
+
+综合运用所有知识点
+
+实现一个完整的自动化部署流程
+
+处理 Git 拉取、依赖安装、服务重启等
+
+实操任务
+编写一个部署脚本 deploy.sh，完成以下功能：
+
+检查参数（项目名、版本号等）。
+拉取 Git 仓库最新代码（git pull）。
+根据项目类型（如 Python、Node）安装依赖（pip install -r requirements.txt 或 npm install）。
+备份当前运行版本。
+重启相关服务（如 systemctl restart myapp）。
+记录部署日志，并在出错时发送告警。
+使用函数将各步骤模块化，使用 set -e 确保出错停止。
+Day 28：总结与扩展
+学习要点
+
+回顾四周学习成果
+
+建立自己的脚本模板（包含帮助、日志、参数解析）
+
+学习资源推荐：
+
+《Bash 脚本教程》（wangdoc.com/bash）
+
+《Advanced Bash-Scripting Guide》
+
+GitHub 上优秀的 bash 脚本项目
+
+下一步：学习 Python 或 Ansible 应对更复杂的自动化
+
+实操任务
+
+整理自己在这四周内写的所有脚本，创建一个 shell-scripts 仓库（如 GitHub），并编写 README。
+选择其中两个脚本，用 getopts 重写参数解析，增加帮助信息。
+为每个脚本添加注释和版权信息。
+尝试用 bash -n script.sh 进行语法检查，用 bash -x script.sh 跟踪执行。
+列出一个你想自动化的日常任务清单，并尝试用 Shell 脚本实现它。
+
